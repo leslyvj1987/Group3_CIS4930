@@ -1,0 +1,18 @@
+<section ng-controller="MapsListController">
+  <div class="modal-header">
+    <h1 class="modal-title">Parking Information</h1>
+  </div>
+  <div class="modal-body">
+    <ul>
+      <li>Name: {{ marker.parking_name }}</li>
+      <li>Address: {{ marker.address }}</li>
+      <li>Availability: {{ marker.availability }}</li>
+      <li>Price: {{ marker.price }}</li>
+    </ul>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="$dismiss()">Cancel</button>
+    <button type="button" class="btn btn-primary" ng-click="$close()">Go</button>
+  </div>
+
+</section>

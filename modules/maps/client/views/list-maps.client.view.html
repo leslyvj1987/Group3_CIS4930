@@ -1,0 +1,35 @@
+<section>
+  <div class="page-header">
+    <h1 class="header-text">Hi there! Where do you want to park today?</h1>
+  </div>
+  <div class="list-group" ng-if="vm.maps.$resolved" ng-init="fillMapContainer()">
+    <!--Start Map-->
+    <ng-map class="ng-map" zoom="14" center="{{ map.center }}" draggable="true">
+      <marker animation="Animation.DROP" ng-repeat="marker in markers" position="{{ marker.position }}" title="{{ marker.title }}" icon="{{ marker.icon }}" ng-if="!endID || marker.id != endID"  on-click="vm.parkingModal(marker)">
+        <!--<custom-marker id="availableNumber" position="{{marker.position}}" on-click="vm.parkingModal(marker)"><div class="marker-availability">{{ marker.availability }}</div></custom-marker>-->
+        <!--<custom-marker id="availableNumber" position="{{marker.position}}" on-click="vm.parkingModal(marker)"><div></div></custom-marker>-->
+      </marker>
+      <marker ng-if="!endID" title="You" position="current" animation="Animation.BOUNCE" centered="true"></marker>
+
+      <directions
+        ng-repeat="endMarker in markers"
+        ng-if="endID && endMarker.id == endID"
+        draggable="false"
+        panel="directions-panel"
+        travel-mode="DRIVING"
+        origin="current-location"
+        destination="{{ endMarker.address }}"
+      </directions>
+    </ng-map>
+    <!--End Map-->
+  </div>
+  <div class="alert alert-warning text-center" ng-if="vm.maps.$resolved && !vm.maps.length">
+    Sorry, no Parking found!
+  </div>
+  <br>
+  <div class="footer-text">
+    <h4 class="footer-location">Parking Locations & Availabilities</h4>
+    <h4 class="footer-version">Version 1.0</h4>
+    <h4 class="footer-group">Group 3</h4>
+  </div>
+</section>
