@@ -23,7 +23,6 @@ public/dist/
 uploads
 modules/users/client/img/profile/uploads
 config/env/local.js
-config/env/development.js
 *.pem
 
 # Ignoring MEAN.JS's gh-pages branch for documenation
@@ -31,6 +30,7 @@ _site/
 
 # General
 # =======
+*.env
 *.log
 *.csv
 *.dat
