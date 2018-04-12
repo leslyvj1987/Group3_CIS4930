@@ -36,9 +36,7 @@
             position: [parking.coordinates.latitude, parking.coordinates.longitude],
             availability: parking.availability,
             price: parking.price,
-            // icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|'+colorsDynamic[i % 8],
             icon: 'http://chart.apis.google.com/chart?chst=d_map_xpin_letter&chld=pin|' + parking.availability +'|'+colorsDynamic[i % 8],
-            // icon: 'http://chart.apis.google.com/chart?chst=d_bubble_icon_texts_big&chld=parking|bb|' + colorsDynamic[i % 8] +'|000000|' + parking.parking_name + '|Availability:' + parking.availability + '|Price:' + parking.price,
             id: parking._id
           });
         }

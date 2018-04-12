@@ -1,3 +1,4 @@
+require('dotenv').config();
 var express = require("express");
 var bodyParser = require("body-parser");
 
@@ -36,8 +37,8 @@ console.log("server listening on: http://localhost:8080");
 var sendToDB = function(_id, _availability) {
 
     return new Promise(function(resolve, reject) {
-        MongoClient.connect('mongodb://group3spark:12345qwert!@ds239359.mlab.com:39359/smartparking2', function (err, db) {
-          if (err) throw err
+        MongoClient.connect(process.env.MONGODB, function (err, db) {
+          if (err) throw err;
 
           var newValues = {$set: {availability:_availability}};
 
@@ -46,7 +47,7 @@ var sendToDB = function(_id, _availability) {
           });
 
           db.close();
-        })
+        });
 
         resolve("Updated availability of " + _id + " to " + _availability);
 
