@@ -5,9 +5,9 @@
     .module('maps')
     .controller('MapsListController', MapsListController);
 
-  MapsListController.$inject = ['$scope', '$state', '$modal', 'MapsService'];
+  MapsListController.$inject = ['$scope', '$state', '$modal', '$http', 'MapsService'];
 
-  function MapsListController($scope, $state, $modal, MapsService) {
+  function MapsListController($scope, $state, $modal, $http, MapsService) {
     var vm = this;
 
     /* vm.maps is an array of parking objects to display in a map. */
@@ -35,6 +35,7 @@
             address: parking.location,
             position: [parking.coordinates.latitude, parking.coordinates.longitude],
             availability: parking.availability,
+            viewers: parking.viewers,
             price: parking.price,
             icon: 'http://chart.apis.google.com/chart?chst=d_map_xpin_letter&chld=pin|' + parking.availability +'|'+colorsDynamic[i % 8],
             id: parking._id
@@ -59,6 +60,70 @@
               controller: function ($scope, $modalInstance) {
                   $scope.marker = marker;
                   // console.log('Hello: ' +  marker.id);
+                  // Get device's ip address.
+                  var url = "//freegeoip.net/json/";
+                  $http.get(url).then(function(response) {
+                      // console.log(response.data.ip);
+                      $scope.ip = response.data.ip;
+
+                      for (var i = 0; i < vm.maps.length; i++) {
+                          if ($scope.marker.id === vm.maps[i]._id) {
+                              if (!vm.maps[i].viewers) {
+                                  // Create array of viewers.
+                                  vm.maps[i].viewers = [];
+                              }
+
+
+                              // // Create an object to represent current marker date + 30 minutes.
+                              // $scope.nowMinusThirty = new Date();
+                              // $scope.nowMinusThirty.setMinutes($scope.nowMinusThirty.getMinutes() - 30);
+
+                              // Look if the current device is in the DB for this parking.
+                              var isPresent = false;
+                              for(var j = 0; j < vm.maps[i].viewers.length; j++) {
+                                  // console.log('$scope.ip:      ' + $scope.ip);
+                                  // console.log('viewerIP[' + j + ']: ' + vm.maps[i].viewers[j].ip);
+
+                                  if(vm.maps[i].viewers[j].ip === $scope.ip) {
+                                      // Change the date if the ip exists in the DB.
+                                      vm.maps[i].viewers[j].date = new Date();
+                                      isPresent = true;
+                                      console.log('Ip exists! and the date is:' + vm.maps[i].viewers[j].date);
+                                  } else {
+                                      console.log('No equal ips. Let see if it needs to be removed.');
+                                      // Create an object to represent current marker date + 30 minutes.
+                                      $scope.objPlusThirty = new Date(vm.maps[i].viewers[j].date);
+                                      $scope.objPlusThirty.setMinutes($scope.objPlusThirty.getMinutes() + 30);
+
+                                      console.log('objPlus:      ' + $scope.objPlusThirty);
+                                      console.log('Now: ' + new Date());
+                                      if($scope.objPlusThirty < new Date()) {
+                                          console.log('Removing object');
+                                          vm.maps[i].viewers.splice(j, 1);
+                                          j--;
+                                      }
+                                  }
+                              }
+
+                              if (!isPresent) {
+                                  // Push the current device ip and current time to the DB for this parking.
+                                  vm.maps[i].viewers.push({
+                                      ip: $scope.ip,
+                                      date: new Date()
+                                  })
+                              }
+
+                              // Update this parking
+                              vm.maps[i].$update(successCallback, errorCallback);
+                          }
+                      }
+                  });
+
+                  function successCallback(res) {
+                  }
+                  function errorCallback(res) {
+                      vm.error = res.data.message;
+                  }
               },
               resolve: {
 

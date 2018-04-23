@@ -20,6 +20,14 @@ var MapSchema = new Schema({
     type: Number,
     default: 0
   },
+    viewers:{
+      type: [
+        {
+          ip: String,
+          date: Date
+        }
+      ]
+    },
   coordinates: {
     latitude: Number,
     longitude: Number
