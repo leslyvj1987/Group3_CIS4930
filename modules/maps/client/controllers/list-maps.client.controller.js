@@ -17,6 +17,7 @@
       $scope.fillMapContainer = function() {
           /* Map properties */
           $scope.map = {center: [29.6436, -82.3549], zoom: 4, address: "686 Museum Rd, Gainesville, FL 32601"};
+          $scope.hardCodedCenter = [29.6436, -82.3549];
 
           /* Clear the marker container */
           $scope.markers = [];
@@ -34,6 +35,7 @@
                       availability: parking.availability,
                       viewers: parking.viewers,
                       price: parking.price,
+                      animation: "Animation.DROP",
                       icon: 'http://chart.apis.google.com/chart?chst=d_map_xpin_letter&chld=pin|' + parking.availability +'|'+colorsDynamic[i % 8],
                       id: parking._id
                   });
@@ -47,13 +49,18 @@
           vm.mapsDefault = MapsService.query().$promise.then(function (data) {
               if ((data && data.length > 0) && ($scope.markers && $scope.markers.length > 0)) {
                   for (var i = 0; i < $scope.markers.length; i++) {
-                      if ($scope.markers[i] && ($scope.markers[i].availability !== data[i].availability)) {
+                      var temp = $scope.markers[i];
+                      if (temp && (temp.availability !== data[i].availability)) {
                           var temp = $scope.markers[i];
                           temp.availability = data[i].availability;
-                          temp.icon = 'http://chart.apis.google.com/chart?chst=d_map_xpin_letter&chld=pin|' + temp.availability +'|'+colorsDynamic[i % 8];
-
-                          $scope.markers.splice(i, 1);
-                          $scope.markers.splice(i, 0, temp);
+                          temp.icon = 'http://chart.apis.google.com/chart?chst=d_map_xpin_letter&chld=pin|' + temp.availability +'|'+'FF0000';
+                          //temp.setAnimation(google.maps.Animation.BOUNCE);
+                          //temp.animation = ("Animation.BOUNCE");// animation = google.maps.Animation.BOUNCE;
+                          // $scope.markers.splice(i, 1);
+                          // $scope.markers.splice(i, 0, temp);
+                      } else {
+                        //temp.animation = "Animation.NONE";
+                        temp.icon = 'http://chart.apis.google.com/chart?chst=d_map_xpin_letter&chld=pin|' + temp.availability +'|'+colorsDynamic[i % 8];
                       }
                   }
               }
@@ -90,6 +97,7 @@
 
                               // Look if the current device is in the DB for this parking.
                               var isPresent = false;
+                              console.log("derrr");
                               for(var j = 0; j < vm.maps[i].viewers.length; j++) {
                                   if(vm.maps[i].viewers[j].ip === $scope.ip) {
                                       // Change the date if the ip exists in the DB.
@@ -122,6 +130,7 @@
                   });
 
                   function successCallback(res) {
+                    console.log("Success")
                   }
                   function errorCallback(res) {
                       vm.error = res.data.message;

@@ -9,8 +9,8 @@
       <li>Availability: {{ marker.availability }}</li>
       <li>Price: {{ marker.price }}</li>
       <li ng-if="(marker.viewers.length - 1) == 0">Nobody has viewed this parking area in the last 30 minutes.</li>
-      <li ng-if="(marker.viewers.length - 1) == 1">There was {{ marker.viewers.length }} person watching this parking area in the last 30 minutes.</li>
-      <li ng-if="(marker.viewers.length - 1) > 1">There were {{ marker.viewers.length }} people watching this parking area in the last 30 minutes.</li>
+      <li ng-if="(marker.viewers.length - 1) == 1">There was {{ marker.viewers.length - 1 }} person watching this parking area in the last 30 minutes.</li>
+      <li ng-if="(marker.viewers.length - 1) > 1">There were {{ marker.viewers.length - 1 }} people watching this parking area in the last 30 minutes.</li>
     </ul>
   </div>
   <div class="modal-footer">

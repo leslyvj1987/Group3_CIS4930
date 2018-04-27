@@ -10,7 +10,7 @@
         <!--<custom-marker id="availableNumber" position="{{marker.position}}" on-click="vm.parkingModal(marker)"><div></div></custom-marker>-->
       </marker>
       <!--<marker ng-if="!endID" title="You" position="current" animation="Animation.BOUNCE" centered="true"></marker>-->
-      <marker ng-if="!endID" title="You" position="{{ map.center }}" animation="Animation.BOUNCE" centered="true"></marker>
+      <marker ng-if="!endID" title="You" position="{{ hardCodedCenter }}" animation="Animation.DROP" centered="true"></marker>
 
       <directions
         ng-repeat="endMarker in markers"
@@ -18,7 +18,7 @@
         draggable="false"
         panel="directions-panel"
         travel-mode="DRIVING"
-        origin="{{ map.center }}"
+        origin="{{ hardCodedCenter }}"
         destination="{{ endMarker.address }}"
       </directions>
         <!--origin="current-location"-->
