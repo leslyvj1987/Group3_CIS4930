@@ -3,11 +3,13 @@ import json
 import time
 import random
 
-def post(value):
-	r = requests.post("http://localhost:8080/update", json={'_id': '4abfe91fd376605d02700b3b', 'availability': value})
-	print("set to " + str(value))
+def post(id, value):
+	r = requests.post("http://localhost:8080/update", json={'_id': id, 'availability': value})
+	print("Set " + id + " to " + str(value))
 	return;
 
+ids = ['4abfe91fd376605d02700b3b', '5abfe91fd376605d02700b3b']
+
 while(True):
-	post(random.randint(0, 40))
-	time.sleep(random.uniform(1, 3))
+	post(ids[random.randint(0, 1)], random.randint(0, 40))
+	time.sleep(random.uniform(2, 8))
